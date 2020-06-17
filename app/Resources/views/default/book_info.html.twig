@@ -19,7 +19,8 @@
      
 <form method="post" action="/updateCart">  
      <input type="hidden" name="book_id" value="{{ book.id }}" />
-     <input type="hidden" name="book_name" value="{{ book.name }}" />    
+     <input type="hidden" name="book_name" value="{{ book.name }}" /> 
+     <input type="hidden" name="book_category" value="{{ book.category.name }}" />   
      <input type="hidden" name="unit_price" value="{{ book.unit_price }}" />
 
     Quantity: <select name="book_quantity" id="quantity" >
