@@ -1,0 +1,66 @@
+{% extends 'default/index.html.twig' %}
+
+{% block body %}
+<link href="{{ asset('css/demo.css') }}"" rel="stylesheet">
+<link href="{{ asset('css//elastislide.css') }}"" rel="stylesheet">
+<link href="{{ asset('css/custom.css') }}"" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="{{ asset('js/modernizr.custom.17475.js') }}"></script>
+
+    <div id="wrapper">
+{% include 'header.html.twig' %}
+<div id="cartbuttonsection">
+
+<a href="/" class="whitebtn" style="text-decoration: none;">Continue Shopping</a>
+<a href="/checkout" class="btnclass" style="text-decoration: none;">Checkout</a>
+<a id="clearall" href="/clearCart" class="btnclass" style="text-decoration: none;">Clear All</a>
+
+</div>
+
+<h3 align="left">Order Details</h3>  
+               
+                     <table class="table table-bordered">  
+                          <tr>  
+                               <th width="30%">Book Name</th>
+                               <th width="20%">Book Category</th>   
+                               <th width="10%">Quantity</th>  
+                               <th width="20%">Price</th>  
+                               <th width="15%">Total</th>  
+                               <th width="5%">Action</th>  
+                          </tr> 
+                          {% set total = 0 %}
+
+                          {% for key,val in shopping_cart %}
+
+                          {% set item_total = val["book_quantity"]*val["unit_price"] %}
+                                <tr>  
+                               <td>{{ val["book_name"] }}</td> 
+                               <td>{{ val["book_category"] }}</td> 
+                               <td>{{ val["book_quantity"] }}</td>  
+                               <td>{{ val["unit_price"] }}</td>  
+                               <td>{{ item_total|number_format(2) }}</td>  
+                               <td><a href="/deleteCartItem/{{ val["book_id"] }}"><i class="fa fa-remove" style="font-size:24px;color:red"></i></a></td>  
+                          </tr> 
+
+                          {% set total =   total  + item_total %}
+
+                        {% endfor %} 
+
+                        <tr></tr>
+                          <tr>  
+                               <td colspan="3" align="right" style="font-size:15px;font-weight:bold;">Total: </td>  
+                               <td style="font-size:18px;font-weight:bold;color:red;" align="center"> {{ total|number_format(2) }}</td>  
+                               <td></td>  
+                          </tr>  
+                          
+                          
+                        
+                     </table>  
+                
+
+
+    </div>
+    
+    
+{% endblock %}
+
