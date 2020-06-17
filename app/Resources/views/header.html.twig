@@ -1,0 +1,67 @@
+    {% block body %}
+    
+    <div id="header"> <!-- start header-->
+
+    <img src="{{ asset('favicon.ico') }}" />
+      
+            <div id="welcome" align="center">
+                <h1><span>Welcome to Symfony BookStore </span> </h1>
+            </div>
+            {% set inCart = app.session.get('inCart') %}
+            {% set totalAmount = app.session.get('totalAmount') %}
+
+<div id="shopping_cart" align="right">
+ <fieldset>
+ <legend>Shopping Cart</legend>
+ <p align="left">{{ inCart }} item(s) in the cart </p>
+<hr>
+
+  <p style="float: left;">Total:</p>  <p style="font-size:15px;font-weight:bold;color:red;">LKR.  {{totalAmount}}</p>
+</fieldset>
+</div>
+
+</div> <!-- end header-->
+
+{% endblock %}
+
+{% block stylesheets %}
+
+<style>
+
+	#shopping_cart {
+  float: right;
+  margin-top:-130px;
+
+}
+
+fieldset {
+  margin: 20px;
+  padding: 0 10px 10px;
+  border: 1px solid #666;
+  border-radius: 8px;
+  padding-top: 10px;
+  width:300px;
+  height:100px;
+  background-image: url("images/cart.png");
+  background-repeat: no-repeat;
+  background-position: 220px -15px; 
+  background-size: 70px 80px;
+}
+legend {
+  padding: 2px 4px;
+  background: #fff;
+  /* For better legibility against the box-shadow */
+}
+fieldset > legend {
+  float: left;
+  margin-top: -20px;
+}
+fieldset > legend + * {
+  clear: both;
+}
+p{
+	font-weight: bold;
+}
+
+</style>
+{% endblock %}

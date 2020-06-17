@@ -1,0 +1,208 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+<link href="{{ asset('css/demo.css') }}"" rel="stylesheet">
+<link href="{{ asset('css//elastislide.css') }}"" rel="stylesheet">
+<link href="{{ asset('css/custom.css') }}"" rel="stylesheet">
+<script src="{{ asset('js/modernizr.custom.17475.js') }}"></script>
+
+    <div id="wrapper">
+{% include 'header.html.twig' %}
+
+
+<div align="right" id="filter">
+Filter Books
+<select id="filter_category" >
+    <option value="" selected="selected">Please choose</option>
+    <option value="children" >Children</option>
+    <option value="fiction" >Fiction</option>
+
+</select>
+</div>
+
+
+<div id="children" >
+<h1><span> Children Books</span></h1>
+
+				<!-- Elastislide Carousel -->
+				<ul id="carousel_children" class="elastislide-list">
+
+				{% for bc in book_children %} 
+       			<li style="width: 33.2907%; max-width: 166px; max-height: 212px;">
+            	<a href="book/{{bc.id}}"><img src="{{ bc.preview_img_path }}" alt="{{ bc.name }}" /></a>
+    			</li>
+                {% endfor %} 
+
+				</ul>
+				<!-- End Elastislide Carousel -->
+
+</div>
+
+<div id="fiction">
+<h1><span>Fiction Books</span></h1>
+
+				<!-- Elastislide Carousel -->
+				<ul id="carousel_fiction" class="elastislide-list" style="display: block; max-height: 172px; transition: all 500ms ease-in-out 0s;">
+
+				 {% for bf in book_fiction %} 
+					<li style="width: 33%; max-width: 166px; max-height: 212px;">
+					<a href="book/{{bf.id}}"><img src="{{ bf.preview_img_path }}" alt="{{ bf.name }}"/></a>
+					</li>
+	             {% endfor %} 
+
+				</ul>
+				<!-- End Elastislide Carousel -->
+
+</div>
+     
+    </div>
+
+
+{% endblock %}
+
+{% block stylesheets %}
+
+<style>
+
+    body { background: #F5F5F5; font: 18px/1.5 sans-serif; }
+    h1, h2 { line-height: 1.2; margin: 0 0 .5em; }
+    h1 { font-size: 36px; }
+    h2 { font-size: 21px; margin-bottom: 1em; }
+    p { margin: 0 0 1em 0; }
+    a { color: #0000F0; }
+    a:hover { text-decoration: none; }
+    code { background: #F5F5F5; max-width: 100px; padding: 2px 6px; word-wrap: break-word; }
+    #wrapper { background: #FFF; margin: 1em auto; max-width: 1800px; width: 95%; }
+    #container { padding: 2em; }
+    #welcome, #status { margin-bottom: 2em; }
+    #welcome h1 span { display: block; font-size: 75%; }
+    #top10 h1 span { display: block; font-size: 50%; color:orange}
+	#fiction h1 span { display: block; font-size: 50%; color:orange}
+	#children h1 span { display: block; font-size: 50%; color:orange}
+    #icon-status, #icon-book { float: left; height: 64px; margin-right: 1em; margin-top: -4px; width: 64px; }
+    #icon-book { display: none; }
+	
+
+#filter {
+  margin-top:50px;
+  margin-right:5px;
+ 
+}
+
+    @media (min-width: 768px) {
+        #wrapper { width: 80%; margin: 2em auto; }
+        #icon-book { display: inline-block; }
+        #status a, #next a { display: block; }
+
+        @-webkit-keyframes fade-in { 0% { opacity: 0; } 100% { opacity: 1; } }
+        @keyframes fade-in { 0% { opacity: 0; } 100% { opacity: 1; } }
+        .sf-toolbar { opacity: 0; -webkit-animation: fade-in 1s .2s forwards; animation: fade-in 1s .2s forwards;}
+    }
+
+select{
+	align:right;
+    margin:40px;
+    background: rgba(0,0,0,0.3);
+    color:#fff;
+    text-shadow:0 1px 0 rgba(0,0,0,0.4);
+}
+
+.row {
+  display: flex; /* equal height of the children */
+}
+
+.col {
+  padding: 1em;
+ 
+}
+
+#booktitle {
+    font-size: 13px;
+    font-weight: bold;
+    color: #333;
+    font-family: 'Droid Sans', sans-serif;
+    padding-top: 260px;
+    padding-right: 0.2em;
+    font-family: "Droid Sans";
+    display: block;
+	position:fixed;
+    line-height: 1.4em;
+}
+
+
+.btnclass {
+    font-family: 'Droid Sans', sans-serif;
+    font-size: 14px;
+    color: #fff;
+    background: -moz-linear-gradient( top, #ffb27f 0%, #ff6600);
+    background: -webkit-gradient( linear, left top, left bottom, from(#ffb27f), to(#ff6600));
+    background: -o-linear-gradient(#ffb27f, #ff6600);
+    border-radius: 20px;
+    border: 1px solid #ff6600;
+    font-weight: bold;
+    padding-top: 4px;
+    padding-right: 18px;
+    padding-bottom: 4px;
+    padding-left: 18px;
+    cursor: pointer;
+}
+
+.backToList{
+  background-color: #FF6347;
+  border: 1px solid #ff6600;
+  color: white;
+  padding-top: 4px;
+  padding-right: 18px;
+  padding-bottom: 4px;
+  padding-left: 18px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 10px;
+  font-weight: bold;
+}
+
+
+</style>
+{% endblock %}
+
+{% block javascripts %}
+
+		<script type="text/javascript" src="{{ asset('js/jquery.min.js') }}"></script>
+		<script type="text/javascript" src="{{ asset('js/jquerypp.custom.js') }}"></script>
+		<script type="text/javascript" src="{{ asset('js/jquery.elastislide.js') }}"></script>
+        
+		<script type="text/javascript">
+
+            $( '#carousel_children' ).elastislide();
+            $( '#carousel_fiction' ).elastislide();
+$(function() {
+    $('#filter_category').val('');
+});
+
+    $('#filter_category').change(function() {
+
+		
+        $( '#children' ).hide();
+        $( '#fiction' ).hide();
+
+        // to get the selected value
+        var selected = $(this).val();
+
+		$( '#' +  selected ).show();
+
+    });
+
+function goBack() {
+  window.history.back();
+}
+			
+		</script>
+
+{% endblock %}
+
+

@@ -1,0 +1,49 @@
+{% extends 'default/index.html.twig' %}
+
+{% block body %}
+<link href="{{ asset('css/demo.css') }}"" rel="stylesheet">
+<link href="{{ asset('css//elastislide.css') }}"" rel="stylesheet">
+<link href="{{ asset('css/custom.css') }}"" rel="stylesheet">
+<script src="{{ asset('js/modernizr.custom.17475.js') }}"></script>
+
+    <div id="wrapper">
+{% include 'header.html.twig' %}
+
+<div class="row">
+  <div class="col"><img src="../{{ book.preview_img_path }}" /></div>
+  <div class="col">      <p style="font-size:25px;font-weight:bold;"> {{ book.name }} </p>
+   <p style="float: left;">By:</p>  <p style="font-size:15px;font-weight:bold;color:orange;"> {{ book.author.name }}</p>
+   <p style="float: left;">Publication:</p>  <p style="font-size:15px;font-weight:bold;color:orange;"> {{ book.publication.name }}</p>
+   <p style="float: left;">Category:</p>  <p style="font-size:15px;font-weight:bold;color:orange;"> {{ book.category.name }}</p>
+   <p style="float: left;">Price:</p>  <p style="font-size:15px;font-weight:bold;color:orange;">LKR.  {{ book.unit_price }}</p>
+     
+<form method="post" action="/updateCart">  
+     <input type="hidden" name="book_id" value="{{ book.id }}" />
+     <input type="hidden" name="book_name" value="{{ book.name }}" />    
+     <input type="hidden" name="unit_price" value="{{ book.unit_price }}" />
+
+    Quantity: <select name="book_quantity" id="quantity" >
+    <option value="1" selected="selected">1</option>
+    <option value="2" >2</option>
+    <option value="3" >3</option>
+    <option value="4" >4</option>
+    <option value="5" >5</option>
+</select>
+<button class="btnclass" id="addtocartbtn" type="submit">Add to cart</button><br>
+</form>
+
+Language: {{ book.language }}<br><br>
+Description: {{ book.description }}<br><br>
+ISBN: {{ book.isbn }}<br><br>
+<button class="backToList" type="cancel" onclick="goBack()">Back to list</button><br>
+</div>
+
+</div>
+
+    </div>
+    
+    
+{% endblock %}
+
+
+
