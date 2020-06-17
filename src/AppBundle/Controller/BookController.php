@@ -69,7 +69,8 @@ class BookController extends Controller
                       $count = count($shopping_cart);  
                       $item_array = array(  
                         'book_id'               =>     $request->get("book_id"),  
-                        'book_name'             =>     $request->get("book_name"),  
+                        'book_name'             =>     $request->get("book_name"),
+                        'book_category'         =>     $request->get("book_category"),   
                         'unit_price'            =>     $request->get("unit_price"),  
                         'book_quantity'         =>     $request->get("book_quantity")  
                    ); 
@@ -87,7 +88,8 @@ class BookController extends Controller
             {  
                  $item_array = array(  
                       'book_id'               =>     $request->get("book_id"),  
-                      'book_name'             =>     $request->get("book_name"),  
+                      'book_name'             =>     $request->get("book_name"),
+                      'book_category'         =>     $request->get("book_category"),  
                       'unit_price'            =>     $request->get("unit_price"),  
                       'book_quantity'         =>     $request->get("book_quantity")  
                  );  
@@ -103,6 +105,124 @@ class BookController extends Controller
 
     }
 
+       /**
+     * Matches /viewCart exactly
+     *
+     * @Route("/viewCart", name="viewCart")
+     */
+    public function viewCartAction(Request $request)
+    {
+        if(!empty($this->session->get('shopping_cart'))){
+
+        $shopping_cart=$this->session->get('shopping_cart');
+        return $this->render('default/view_cart.html.twig',array('shopping_cart' => $shopping_cart));
+        }
+        else{
+            return new Response('There is No items on your cart');
+
+        }
+
+    }
+
+    /**
+     * @Route("/deleteCartItem/{id}", name="deleteCartItem", requirements={"id"="\d+"})
+     */
+    public function deleteCartItemAction(int $id)
+    {
+
+        if(!empty($this->session->get('shopping_cart'))){
+
+            $shopping_cart=$this->session->get('shopping_cart');
+            foreach($shopping_cart as $keys => $values)  
+            {  
+                 if($values["book_id"] == $id)  
+                 {  
+                      unset($shopping_cart[$keys]); 
+                      $this->session->set('shopping_cart', $shopping_cart);
+                      
+                      $this->session->set('inCart', count($shopping_cart));
+                      $total = 0;  
+                      foreach($shopping_cart as $keys => $values)  
+                      {  
+                          $total = $total + ($values["book_quantity"] * $values["unit_price"]);  
+                      }
+                      $this->session->set('totalAmount', number_format($total,2));
+                 }  
+            }
+
+        $shopping_cart=$this->session->get('shopping_cart');
+        return $this->render('default/view_cart.html.twig',array('shopping_cart' => $shopping_cart));
+        }
+
+
+    }
+
+       /**
+     * Matches /clearCart exactly
+     *
+     * @Route("/clearCart", name="clearCart")
+     */
+    public function clearCarttAction(Request $request)
+    {
+            $session = $request->getSession();
+            $session->invalidate(); // destroy session
+            return $this->redirectToRoute('homepage'); 
+    }
+
+           /**
+     * Matches /checkout exactly
+     *
+     * @Route("/checkout", name="checkout")
+     */
+    public function checkoutAction(Request $request)
+    {
+        if(!empty($this->session->get('shopping_cart'))){
+
+            $shopping_cart=$this->session->get('shopping_cart');
+
+            $total_books=0;
+            $total_children_books = 0;
+            $total_fiction_books = 0;
+
+            $total_amount=0;
+            $total_children_book_amount = 0;
+
+            foreach($shopping_cart as $keys => $values)  
+            {  
+                if($values["book_category"]=='Children'){
+                $total_children_books = $total_children_books + $values["book_quantity"]; 
+                $total_children_book_amount = $total_children_book_amount +($values["unit_price"]*$values["book_quantity"]); 
+                }
+
+                if($values["book_category"]=='Fiction'){
+                    $total_fiction_books = $total_fiction_books + $values["book_quantity"];  
+                    }
+                $total_books = $total_books + $values["book_quantity"];
+                $total_amount = $total_amount +($values["unit_price"]*$values["book_quantity"]);
+            }
+
+            $discount_on_children_book=0;
+            $discount_on_book_count=0;
+
+            if($total_children_books>4){    
+
+            $discount_on_children_book =  $total_children_book_amount*0.1; // 5 or more children books get 10% discount
+
+            if($total_children_books>9 && $total_fiction_books>9){
+            
+            $discount_on_book_count = $total_amount*0.05; // 10 books from each category get 5% additional discount
+
+            }
+
+            }
+
+            return $this->render('default/checkout.html.twig',array('shopping_cart' => $shopping_cart,'discount_on_children_book' => $discount_on_children_book,'discount_on_book_count' => $discount_on_book_count));
+            }
+            else{
+                return new Response('There is No items on your cart');
+    
+            }
+    }
 
 
 }
