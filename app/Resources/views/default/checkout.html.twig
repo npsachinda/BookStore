@@ -1,0 +1,65 @@
+{% extends 'default/index.html.twig' %}
+
+{% block body %}
+<link href="{{ asset('css/demo.css') }}"" rel="stylesheet">
+<link href="{{ asset('css//elastislide.css') }}"" rel="stylesheet">
+<link href="{{ asset('css/custom.css') }}"" rel="stylesheet">
+
+<script src="{{ asset('js/modernizr.custom.17475.js') }}"></script>
+
+    <div id="wrapper">
+{% include 'header.html.twig' %}
+<div id="cartbuttonsection">
+
+<a href="/" class="whitebtn" style="text-decoration: none;">Continue Shopping</a>
+<a href="/viewCart" class="btnclass" style="text-decoration: none;">Edit List</a>
+
+</div>
+
+<h3 align="left">Order Details</h3>  
+               
+                     <table class="table table-bordered">  
+                          <tr>  
+                               <th width="30%">Book Name</th>
+                               <th width="20%">Book Category</th>   
+                               <th width="10%">Quantity</th>  
+                               <th width="20%">Price</th>  
+                               <th width="15%">Total</th>  
+                               
+                          </tr> 
+                          {% set total = 0 %}
+
+                          {% for key,val in shopping_cart %}
+
+                          {% set item_total = val["book_quantity"]*val["unit_price"] %}
+                                <tr>  
+                               <td>{{ val["book_name"] }}</td> 
+                               <td>{{ val["book_category"] }}</td> 
+                               <td>{{ val["book_quantity"] }}</td>  
+                               <td>{{ val["unit_price"] }}</td>  
+                               <td>{{ item_total|number_format(2) }}</td>  
+                               
+                          </tr> 
+
+                          {% set total =   total  + item_total %}
+
+                        {% endfor %} 
+
+                        <tr></tr></table> 
+            {% set total_discount =   discount_on_children_book  + discount_on_book_count %}
+            {% set net_amount =   total  - total_discount %}
+   
+           <p style="float: left;">Total Amount:</p>  <p style="font-size:15px;font-weight:bold;color:red;">LKR.  {{ total|number_format(2) }}</p><br>
+
+            <p style="float: left;">Coupon Code:</p>  <input type="text" placeholder="Enter coupon code if you have"><button class="btnclass" id="addtocartbtn" type="submit">Add coupon</button><br>
+<br>
+           <p style="float: left;">Discount on Children Books:</p>  <p style="font-size:15px;font-weight:bold;color:green;">LKR.  {{ discount_on_children_book|number_format(2) }}</p> <br>
+           <p style="float: left;">Other Discount:</p>  <p style="font-size:15px;font-weight:bold;color:green;">LKR.  {{ discount_on_book_count|number_format(2) }}</p><br>
+           <p style="float: left;">Total Discount:</p>  <p style="font-size:15px;font-weight:bold;color:green;">LKR.  {{ total_discount|number_format(2) }}</p><br>
+           <p style="float: left;">Net Amount:</p>  <p style="font-size:15px;font-weight:bold;color:blue;">LKR.  {{ net_amount|number_format(2) }}</p>
+
+                            </div>
+    
+    
+{% endblock %}
+
