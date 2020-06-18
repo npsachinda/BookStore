@@ -46,20 +46,35 @@
                         {% endfor %} 
 
                         <tr></tr></table> 
-            {% set total_discount =   discount_on_children_book  + discount_on_book_count %}
+            {% set total_discount =   discount_on_children_book  + discount_on_book_count  + discount_on_coupon%}
             {% set net_amount =   total  - total_discount %}
    
            <p style="float: left;">Total Amount:</p>  <p style="font-size:15px;font-weight:bold;color:red;">LKR.  {{ total|number_format(2) }}</p><br>
-
-            <p style="float: left;">Coupon Code:</p>  <input type="text" placeholder="Enter coupon code if you have"><button class="btnclass" id="addtocartbtn" type="submit">Add coupon</button><br>
+{% if coupon==0 %}
+            <p style="float: left;">Coupon Code:  <input type="text" id="coupon" placeholder="Enter coupon code if you have"><button class="btnclass" id="addcouponbtn" type="button">Add coupon</button>&nbsp<p id="valid_message"></p></p><br>
 <br>
+{% endif %} 
            <p style="float: left;">Discount on Children Books:</p>  <p style="font-size:15px;font-weight:bold;color:green;">LKR.  {{ discount_on_children_book|number_format(2) }}</p> <br>
            <p style="float: left;">Other Discount:</p>  <p style="font-size:15px;font-weight:bold;color:green;">LKR.  {{ discount_on_book_count|number_format(2) }}</p><br>
+            <p style="float: left;">Discount on Coupon:</p>  <p style="font-size:15px;font-weight:bold;color:green;">LKR.  {{ discount_on_coupon|number_format(2) }}</p><br>
            <p style="float: left;">Total Discount:</p>  <p style="font-size:15px;font-weight:bold;color:green;">LKR.  {{ total_discount|number_format(2) }}</p><br>
            <p style="float: left;">Net Amount:</p>  <p style="font-size:15px;font-weight:bold;color:blue;">LKR.  {{ net_amount|number_format(2) }}</p>
 
+<form method="post" action="#"> 
+
+<input type="hidden" name="net_amount" value="{{ net_amount }}" />
+
+<input type="hidden" name="coupon" value="{{ coupon }}" />
+
+
+<button class="btnclass" type="submit">Proceed to Payment</button>
+
                             </div>
+
+          
     
     
 {% endblock %}
+
+
 
