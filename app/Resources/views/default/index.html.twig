@@ -229,6 +229,34 @@ $(function() {
 
     });
 
+        $('#addcouponbtn').click(function() {
+
+            var coupon = $('#coupon').val();
+            if(coupon=='') return;
+
+            $.ajax({  
+                url:        '/book/validate_coupon',  
+                type:       'POST',
+                data: {coupon: coupon},
+                dataType:   'json',  
+                async:      true,  
+               
+               success: function(data, status) {  
+                  
+                  if(data>0) {
+                    window.location.href = "/book/checkout_with_coupon/"+data;
+                  }else{
+                      $('#valid_message').html('Invalid Coupon..! Please check the coupon'); 
+                      $('#valid_message').css("color", "red");
+                  }
+               },  
+               error : function(xhr, textStatus, errorThrown) {  
+                  alert('Ajax request failed.');  
+               }  
+            });
+
+    });
+
 function goBack() {
   window.history.back();
 }
