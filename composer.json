@@ -31,7 +31,7 @@
     "require-dev": {
         "sensio/generator-bundle": "^3.0",
         "symfony/maker-bundle": "^1.19",
-        "symfony/phpunit-bridge": "^3.0"
+        "symfony/phpunit-bridge": "^5.1"
     },
     "scripts": {
         "symfony-scripts": [
