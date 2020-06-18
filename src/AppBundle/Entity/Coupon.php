@@ -6,7 +6,8 @@ use AppBundle\Repository\CouponRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=CouponRepository::class)
+ * @ORM\Entity
+ * @ORM\Table(name="coupon")
  */
 class Coupon
 {
