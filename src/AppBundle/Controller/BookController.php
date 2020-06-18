@@ -6,8 +6,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 use AppBundle\Entity\Book;
+use AppBundle\Entity\Coupon;
 
 
 class BookController extends Controller
@@ -203,6 +205,7 @@ class BookController extends Controller
 
             $discount_on_children_book=0;
             $discount_on_book_count=0;
+            $discount_on_coupon=0;
 
             if($total_children_books>4){    
 
@@ -216,13 +219,90 @@ class BookController extends Controller
 
             }
 
-            return $this->render('default/checkout.html.twig',array('shopping_cart' => $shopping_cart,'discount_on_children_book' => $discount_on_children_book,'discount_on_book_count' => $discount_on_book_count));
+            $data=array(
+                'shopping_cart' => $shopping_cart,
+                'discount_on_children_book' => $discount_on_children_book,
+                'discount_on_book_count' => $discount_on_book_count,
+                'discount_on_coupon'=>$discount_on_coupon,
+                'coupon'=>0
+            );
+
+            return $this->render('default/checkout.html.twig',$data);
             }
             else{
                 return new Response('There is No items on your cart');
     
             }
     }
+
+    /**
+      *
+      * @Route("/book/validate_coupon")
+     */
+public function validate_couponAction(Request $request) {
+    
+
+      if ($request->isXmlHttpRequest() && $request->getMethod() == 'POST'){ //check for valid Ajax request
+        $coupon_id=$request->get("coupon");
+        
+        $coupon = $this->getDoctrine()
+                       ->getRepository(Coupon::class);
+                        
+
+                        $coupon_valid = $coupon->findOneBy([
+                            'id' => $coupon_id,
+                            'status' => 'pending'
+                        ]);
+
+                     if ($coupon_valid) {
+                        return new JsonResponse($coupon_id);
+                    }
+                    else{
+                        return new JsonResponse(-1);
+                    }
+
+        
+      }
+  
+ } 
+
+
+    /**
+     * @Route("/book/checkout_with_coupon/{id}", name="checkout_with_coupon", requirements={"id"="\d+"})
+     */
+
+public function checkout_with_couponAction(int $id) {
+
+    if(!empty($this->session->get('shopping_cart'))){
+
+        $shopping_cart=$this->session->get('shopping_cart');
+
+        $total_amount=0;
+        
+        foreach($shopping_cart as $keys => $values)  
+        {  
+            $total_amount = $total_amount +($values["unit_price"]*$values["book_quantity"]);
+        }
+
+        $discount_on_children_book=0;
+        $discount_on_book_count=0;
+        $discount_on_coupon=$total_amount*15/100; // 15% discount on valid coupons
+
+       $data= array(
+           'shopping_cart' => $shopping_cart,
+           'discount_on_children_book' => $discount_on_children_book,
+           'discount_on_book_count' => $discount_on_book_count,
+           'discount_on_coupon'=>$discount_on_coupon,
+           'coupon'=>$id);
+
+        return $this->render('default/checkout.html.twig',$data);
+        }
+        else{
+            return new Response('There is No items on your cart');
+
+        }
+
+}
 
 
 }
